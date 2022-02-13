@@ -7,8 +7,9 @@ const sqlQueries = {
                 LEFT JOIN department ON role.department_id = department.id
                 LEFT JOIN employee AS m ON e.manager_id = m.id
                 `,
-  roleText: "SELECT * FROM role",
-  departmentText: "SELECT * FROM department",
+  roleText: `SELECT r.id, r.title, r.salary, d.name AS department FROM role as r
+            JOIN department AS d ON r.department_id = d.id`,
+  departmentText: `SELECT * FROM department`,
   getEmployees: function () {
     connection.query(this.employeeText, (err, results, fields) => {
       if (err) {
@@ -19,6 +20,7 @@ const sqlQueries = {
   },
   getRoles: function () {
     connection.query(this.roleText, (err, results, fields) => {
+      if (err) console.log(err);
       console.table(results);
     });
   },
