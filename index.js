@@ -6,4 +6,6 @@ const sqlQueries = require('./queries/queries');
 // sqlQueries.getEmployees();
 // inquirer.prompt(menu).then(x => console.log(x));
 // sqlQueries.getDepartments();
-sqlQueries.getRoles();
+// sqlQueries.getRoles();
+// sqlQueries.addDepartment('Electrical');
+
