@@ -21,14 +21,8 @@ const sqlQueries = {
   getDepartments: function () {
     return connection.promise().query(this.departmentText);
   },
-  addDepartment: function(department) {
-    connection.query(this.addDepartmentText, [department], (err, results, fields) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.table(`Added ${department} to database`);
-    })
+  addNewDepartment: function(department) {
+    return connection.promise().query(this.addDepartmentText, department);
   },
   
 };
