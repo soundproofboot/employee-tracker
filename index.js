@@ -14,6 +14,14 @@ async function openMenu() {
     let results = await sqlQueries.getEmployees();
     console.table(results[0]);
   }
+  if (response.menu === 'View All Roles') {
+    let results = await sqlQueries.getRoles();
+    console.table(results[0]);
+  }
+  if (response.menu === 'View All Departments') {
+    let results = await sqlQueries.getDepartments();
+    console.table(results[0]);
+  }
   openMenu();
 };
 

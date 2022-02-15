@@ -13,25 +13,13 @@ const sqlQueries = {
   addDepartmentText: `INSERT INTO department (name)
                       VALUES(?)`,
   getEmployees: function () {
-    return connection.promise().query(this.employeeText)
+    return connection.promise().query(this.employeeText);
   },
   getRoles: function () {
-    connection.query(this.roleText, (err, results, fields) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.table(results);
-    });
+    return connection.promise().query(this.roleText);
   },
   getDepartments: function () {
-    connection.query(this.departmentText, (err, results, fields) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.table(results);
-    });
+    return connection.promise().query(this.departmentText);
   },
   addDepartment: function(department) {
     connection.query(this.addDepartmentText, [department], (err, results, fields) => {
