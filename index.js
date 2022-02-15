@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const menu = require('./questions/menu');
 const addDepartment = require('./questions/addDepartment');
+const addRole = require('./questions/addRole');
 
 const cTable = require("console.table");
 const sqlQueries = require('./queries/queries');
@@ -30,6 +31,9 @@ async function openMenu() {
     let { departmentName } = response;
     await sqlQueries.addNewDepartment(departmentName);
     console.log(`${departmentName} added to database.`);
+  }
+  if (response.menu === 'Add Role') {
+    
   }
   openMenu();
 };
