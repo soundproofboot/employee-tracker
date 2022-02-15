@@ -13,6 +13,6 @@ const menu = [
       'Add Department'
     ]
   }
-]
+];
 
 module.exports = menu;
