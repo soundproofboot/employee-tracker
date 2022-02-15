@@ -1,10 +1,10 @@
 const inquirer = require("inquirer");
 const menu = require('./questions/menu');
 const addDepartment = require('./questions/addDepartment');
-const addRole = require('./questions/addRole');
 
 const cTable = require("console.table");
 const sqlQueries = require('./queries/queries');
+const { departmentText } = require("./queries/queries");
 
 
 // sqlQueries.getEmployees();
@@ -33,7 +33,33 @@ async function openMenu() {
     console.log(`${departmentName} added to database.`);
   }
   if (response.menu === 'Add Role') {
-    
+    let departmentQuery = await sqlQueries.getDepartments();
+    let departmentList = departmentQuery[0].map(department => {
+      return department.name;
+    });
+    let response = await inquirer.prompt([
+      {
+        type: "input",
+        name: "roleName",
+        message: "What is the name of the role?",
+      },
+      {
+        type: "input",
+        name: "roleSalary",
+        message: "What is the salary for the role?",
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "Which department does the role belong to?",
+        choices: departmentList,
+      },
+    ]);
+    let index = departmentList.indexOf(response.department);
+    let departmentId = departmentQuery[0][index].id;
+    await sqlQueries.addNewRole([response.roleName, response.roleSalary, departmentId]);
+    console.log(departmentId);
+    // console.log(response);
   }
   openMenu();
 };

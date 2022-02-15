@@ -10,7 +10,10 @@ const addRole = [
     message: 'What is the salary for the role?'
   },
   {
-    type: 'list'
+    type: 'list',
+    name: 'department',
+    message: 'Which department does the role belong to?',
+    list: departmentList
   }
 ]
 

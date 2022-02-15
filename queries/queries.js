@@ -12,6 +12,8 @@ const sqlQueries = {
   departmentText: `SELECT * FROM department`,
   addDepartmentText: `INSERT INTO department (name)
                       VALUES(?)`,
+  addRoleText: `INSERT INTO role (title, salary, department_id)
+                VALUES(?,?,?)`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -24,6 +26,9 @@ const sqlQueries = {
   addNewDepartment: function(department) {
     return connection.promise().query(this.addDepartmentText, department);
   },
+  addNewRole: function(params) {
+    return connection.promise().query(this.addRoleText, params);
+  }
   
 };
 
