@@ -10,10 +10,16 @@ const sqlQueries = {
   roleText: `SELECT r.id, r.title, r.salary, d.name AS department FROM role as r
             JOIN department AS d ON r.department_id = d.id`,
   departmentText: `SELECT * FROM department`,
+  managerText: `SELECT *
+                FROM employee
+                WHERE manager_id IS NULL`,
   addDepartmentText: `INSERT INTO department (name)
                       VALUES(?)`,
   addRoleText: `INSERT INTO role (title, salary, department_id)
                 VALUES(?,?,?)`,
+  addEmployeeText: `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                    VALUES(?,?,?,?)`,
+  managerEmployeeIdText: `SELECT id FROM employee WHERE first_name = ? AND last_name = ?`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -23,13 +29,21 @@ const sqlQueries = {
   getDepartments: function () {
     return connection.promise().query(this.departmentText);
   },
-  addNewDepartment: function(department) {
+  getManagers: function () {
+    return connection.promise().query(this.managerText);
+  },
+  getManagerEmployeeId: function(params) {
+    return connection.promise().query(this.managerEmployeeIdText, params)
+  },
+  addNewDepartment: function (department) {
     return connection.promise().query(this.addDepartmentText, department);
   },
-  addNewRole: function(params) {
+  addNewRole: function (params) {
     return connection.promise().query(this.addRoleText, params);
+  },
+  addNewEmployee: function(params) {
+    return connection.promise().query(this.addEmployeeText, params);
   }
-  
 };
 
 module.exports = sqlQueries;
