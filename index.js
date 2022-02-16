@@ -111,17 +111,44 @@ async function openMenu() {
       await sqlQueries.addNewEmployee([response.firstName, response.lastName, roleId, null]);
             console.log(`${response.firstName} ${response.lastName} added to the database.`);
     }
-
-    // await sqlQueries.addNewEmployee([response.firstName, response.lastName, roleId, 1]);
-    // console.log(response);
   }
+  if (response.menu === 'Update Employee Role') {
+    let employeeQuery = await sqlQueries.getFullEmployeeTable();
+    let employeeList = employeeQuery[0].map(employee => {
+      return `${employee.first_name} ${employee.last_name}`
+    });
+
+    let roleQuery = await sqlQueries.getRoles();
+    let roleList = roleQuery[0].map((role) => {
+      return role.title;
+    });
+
+    let answers = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'employee',
+        message: 'Which employee would you like to update?',
+        choices: employeeList
+      },
+      {
+        type: 'list',
+        name: 'role',
+        message: 'Which role would you like to assign the employee?',
+        choices: roleList
+      }
+    ])
+    let roleIndex = roleList.indexOf(answers.role);
+    let roleId = roleQuery[0][roleIndex].id;
+    
+    let employeeNameArray = answers.employee.split(' ');
+    let employeeIndex = employeeList.indexOf(`${employeeNameArray[0]} ${employeeNameArray[1]}`);
+    let employeeId = employeeQuery[0][employeeIndex].id;
+
+    await sqlQueries.updateEmployeeRole([roleId, employeeId]);
+    console.log('Employee role updated');
+  }
+
   openMenu();
 }
 
 openMenu();
-// async function doThisNow () {
-//   let managerIdReturned = await sqlQueries.getManagerEmployeeId(['Dave', 'Foley']);
-//   console.log(managerIdReturned[0]);
-// }
-
-// doThisNow();

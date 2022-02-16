@@ -20,6 +20,10 @@ const sqlQueries = {
   addEmployeeText: `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                     VALUES(?,?,?,?)`,
   managerEmployeeIdText: `SELECT id FROM employee WHERE first_name = ? AND last_name = ?`,
+  updateEmployeeRoleText: `UPDATE employee
+                          SET role_id = ?
+                          WHERE id = ?`,
+  getFullEmployeeTableText: `SELECT * FROM employee`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -35,6 +39,9 @@ const sqlQueries = {
   getManagerEmployeeId: function(params) {
     return connection.promise().query(this.managerEmployeeIdText, params)
   },
+  getFullEmployeeTable: function() {
+    return connection.promise().query(this.getFullEmployeeTableText)
+  },
   addNewDepartment: function (department) {
     return connection.promise().query(this.addDepartmentText, department);
   },
@@ -43,6 +50,9 @@ const sqlQueries = {
   },
   addNewEmployee: function(params) {
     return connection.promise().query(this.addEmployeeText, params);
+  },
+  updateEmployeeRole: function(params) {
+    return connection.promise().query(this.updateEmployeeRoleText, params)
   }
 };
 
