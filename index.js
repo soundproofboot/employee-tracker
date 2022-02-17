@@ -4,13 +4,6 @@ const addDepartment = require('./questions/addDepartment');
 
 const cTable = require('console.table');
 const sqlQueries = require('./queries/queries');
-const { departmentText } = require('./queries/queries');
-const { listenerCount } = require('./queries/connection');
-
-// sqlQueries.getEmployees();
-// sqlQueries.getDepartments();
-// sqlQueries.getRoles();
-// sqlQueries.addDepartment('Electrical');
 
 async function openMenu() {
   let response = await inquirer.prompt(menu);
