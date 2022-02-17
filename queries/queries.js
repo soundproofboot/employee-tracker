@@ -28,6 +28,7 @@ const sqlQueries = {
                       SET manager_id = ?
                       WHERE id = ?`,
   getManagerTeamCondition: `WHERE e.manager_id = ?`,
+  getEmployeeByDepartmentCondition: `WHERE department_id = ?`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -62,7 +63,10 @@ const sqlQueries = {
     return connection.promise().query(this.updateManagerText, params);
   },
   getManagerTeam: function(params) {
-    return connection.promise().query(`${this.employeeText} ${this.getManagerTeamCondition}`, params)
+    return connection.promise().query(`${this.employeeText} ${this.getManagerTeamCondition}`, params);
+  },
+  getEmployeeByDepartment: function(params) {
+    return connection.promise().query(`${this.employeeText} ${this.getEmployeeByDepartmentCondition}`, params);
   }
 };
 

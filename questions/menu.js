@@ -12,7 +12,8 @@ const menu = [
       'View All Departments',
       'Add Department',
       'Update Employee Manager',
-      `See Manager's Team`
+      `See Manager's Team`,
+      `See Employee's by Department`
     ]
   }
 ];

@@ -217,6 +217,30 @@ async function openMenu() {
     console.table(results[0]);
   }
 
+  if (response.menu === `See Employee's by Department`) {
+    let departmentQuery = await sqlQueries.getDepartments();
+    let departmentList = departmentQuery[0].map(department => {
+      return department.name
+    });
+    let answer = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'department',
+        message: 'Select a department',
+        choices: departmentList
+      }
+    ])
+
+    let index = departmentList.indexOf(answer.department);
+    let departmentId = departmentQuery[0][index].id;
+
+    let results = await sqlQueries.getEmployeeByDepartment(departmentId);
+    if (results[0].length) {
+      console.table(results[0]);
+    } else {
+      console.log('No employees in that department');
+    }
+  }
   openMenu();
 }
 
