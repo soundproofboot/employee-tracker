@@ -62,8 +62,6 @@ async function openMenu() {
       response.roleSalary,
       departmentId,
     ]);
-    console.log(departmentId);
-    // console.log(response);
   }
   if (response.menu === 'Add Employee') {
     let roleQuery = await sqlQueries.getRoles();
@@ -240,6 +238,75 @@ async function openMenu() {
     } else {
       console.log('No employees in that department');
     }
+  }
+  if (response.menu === 'Remove an Employee') {
+    let employeeQuery = await sqlQueries.getFullEmployeeTable();
+    let employeeList = employeeQuery[0].map((employee) => {
+      return `${employee.first_name} ${employee.last_name}`;
+    });
+    let answer = await inquirer.prompt([
+      {
+      type: 'list',
+      name: 'employee',
+      message: 'Which employee would you like to remove?',
+      choices: employeeList
+      }
+    ])
+
+    let employeeNameArray = answer.employee.split(' ');
+    let employeeIndex = employeeList.indexOf(
+      `${employeeNameArray[0]} ${employeeNameArray[1]}`
+    );
+    let employeeId = employeeQuery[0][employeeIndex].id;
+
+    await sqlQueries.removeEmployee(employeeId);
+    console.log(`${answer.employee} has been removed from the database`)
+  }
+  if (response.menu === 'Remove a Role') {
+    let roleQuery = await sqlQueries.getRoles();
+    let roleList = roleQuery[0].map((role) => {
+      return role.title;
+    });
+    let answer = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'role',
+        message: 'Which role would you like to remove?',
+        choices: roleList
+      }
+    ])
+    
+    let roleIndex = roleList.indexOf(answer.role);
+    let roleId = roleQuery[0][roleIndex].id;
+
+    await sqlQueries.removeRole(roleId);
+    console.log(`${answer.role} has been removed from the database`);
+  }
+  if (response.menu === 'Remove a Department') {
+    let departmentQuery = await sqlQueries.getDepartments();
+    let departmentList = departmentQuery[0].map((department) => {
+      return department.name;
+    });
+    let answer = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'department',
+        message: 'Which department would you like to remove?',
+        choices: departmentList,
+      },
+    ]);
+
+    let index = departmentList.indexOf(answer.department);
+    let departmentId = departmentQuery[0][index].id;
+
+    await sqlQueries.removeDepartment(departmentId);
+    console.log(`${answer.department} was removed from the database`);
+    // let results = await sqlQueries.getEmployeeByDepartment(departmentId);
+    // if (results[0].length) {
+    //   console.table(results[0]);
+    // } else {
+    //   console.log('No employees in that department');
+    // }
   }
   openMenu();
 }

@@ -29,6 +29,9 @@ const sqlQueries = {
                       WHERE id = ?`,
   getManagerTeamCondition: `WHERE e.manager_id = ?`,
   getEmployeeByDepartmentCondition: `WHERE department_id = ?`,
+  removeEmployeeText: `DELETE FROM employee WHERE id = ?`,
+  removeRoleText: `DELETE FROM role WHERE id = ?`,
+  removeDepartmentText: `DELETE FROM department WHERE id = ?`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -67,6 +70,15 @@ const sqlQueries = {
   },
   getEmployeeByDepartment: function(params) {
     return connection.promise().query(`${this.employeeText} ${this.getEmployeeByDepartmentCondition}`, params);
+  },
+  removeEmployee: function(params) {
+    return connection.promise().query(this.removeEmployeeText, params);
+  },
+  removeRole: function(params) {
+    return connection.promise().query(this.removeRoleText, params);
+  },
+  removeDepartment: function(params) {
+    return connection.promise().query(this.removeDepartmentText, params);
   }
 };
 

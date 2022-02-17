@@ -13,7 +13,10 @@ const menu = [
       'Add Department',
       'Update Employee Manager',
       `See Manager's Team`,
-      `See Employee's by Department`
+      `See Employee's by Department`,
+      'Remove an Employee',
+      'Remove a Role',
+      'Remove a Department'
     ]
   }
 ];
