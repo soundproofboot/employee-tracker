@@ -16,7 +16,8 @@ const menu = [
       `See Employee's by Department`,
       'Remove an Employee',
       'Remove a Role',
-      'Remove a Department'
+      'Remove a Department',
+      `See Department's Total Budget`
     ]
   }
 ];

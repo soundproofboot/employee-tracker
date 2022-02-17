@@ -301,13 +301,36 @@ async function openMenu() {
 
     await sqlQueries.removeDepartment(departmentId);
     console.log(`${answer.department} was removed from the database`);
-    // let results = await sqlQueries.getEmployeeByDepartment(departmentId);
-    // if (results[0].length) {
-    //   console.table(results[0]);
-    // } else {
-    //   console.log('No employees in that department');
-    // }
   }
+  if (response.menu === `See Department's Total Budget`) {
+    let departmentQuery = await sqlQueries.getDepartments();
+    let departmentList = departmentQuery[0].map((department) => {
+      return department.name;
+    });
+    let answer = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'department',
+        message: `Which department's budget would you like to see?`,
+        choices: departmentList,
+      },
+    ]);
+
+    let index = departmentList.indexOf(answer.department);
+    let departmentId = departmentQuery[0][index].id;
+
+    let results = await sqlQueries.getEmployeeByDepartment(departmentId);
+    if (results[0].length) {
+      let salaryArray = results[0].map(employee => {
+        return Number(employee.salary);
+      })
+      let totalSalary = salaryArray.reduce((a,b) => a+b);
+      console.log(`The total budget for this department is $${totalSalary}`);
+    } else {
+      console.log('The budget for this department is currently $0');
+    }
+  }
+  
   openMenu();
 }
 

@@ -32,6 +32,8 @@ const sqlQueries = {
   removeEmployeeText: `DELETE FROM employee WHERE id = ?`,
   removeRoleText: `DELETE FROM role WHERE id = ?`,
   removeDepartmentText: `DELETE FROM department WHERE id = ?`,
+  getTotalBudgetText: `SELECT SUM()`,
+
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
