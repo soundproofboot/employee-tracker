@@ -10,7 +10,9 @@ const menu = [
       'View All Roles',
       'Add Role',
       'View All Departments',
-      'Add Department'
+      'Add Department',
+      'Update Employee Manager',
+      `See Manager's Team`
     ]
   }
 ];

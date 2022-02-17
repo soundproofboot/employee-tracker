@@ -24,6 +24,10 @@ const sqlQueries = {
                           SET role_id = ?
                           WHERE id = ?`,
   getFullEmployeeTableText: `SELECT * FROM employee`,
+  updateManagerText: `UPDATE employee
+                      SET manager_id = ?
+                      WHERE id = ?`,
+  getManagerTeamCondition: `WHERE e.manager_id = ?`,
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -53,6 +57,12 @@ const sqlQueries = {
   },
   updateEmployeeRole: function(params) {
     return connection.promise().query(this.updateEmployeeRoleText, params)
+  },
+  updateManager: function(params) {
+    return connection.promise().query(this.updateManagerText, params);
+  },
+  getManagerTeam: function(params) {
+    return connection.promise().query(`${this.employeeText} ${this.getManagerTeamCondition}`, params)
   }
 };
 

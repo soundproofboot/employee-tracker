@@ -5,6 +5,7 @@ const addDepartment = require('./questions/addDepartment');
 const cTable = require('console.table');
 const sqlQueries = require('./queries/queries');
 const { departmentText } = require('./queries/queries');
+const { listenerCount } = require('./queries/connection');
 
 // sqlQueries.getEmployees();
 // sqlQueries.getDepartments();
@@ -146,6 +147,74 @@ async function openMenu() {
 
     await sqlQueries.updateEmployeeRole([roleId, employeeId]);
     console.log('Employee role updated');
+  }
+  if (response.menu === 'Update Employee Manager') {
+    let employeeQuery = await sqlQueries.getFullEmployeeTable();
+    let employeeList = employeeQuery[0].map(employee => {
+      return `${employee.first_name} ${employee.last_name}`
+    });
+    
+    let managerQuery = await sqlQueries.getManagers();
+    let managerList = managerQuery[0].map((manager => {
+      return `${manager.first_name} ${manager.last_name}`
+    }));
+
+    let answers = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'employee',
+        message: 'Which employee would you like to update?',
+        choices: employeeList,
+      },
+      {
+        type: 'list',
+        name: 'manager',
+        message: "Who is the employee's manager?",
+        choices: ['None', ...managerList],
+      },
+    ]);
+
+    let employeeNameArray = answers.employee.split(' ');
+    let employeeIndex = employeeList.indexOf(`${employeeNameArray[0]} ${employeeNameArray[1]}`);
+    let employeeId = employeeQuery[0][employeeIndex].id;
+
+    let managerId;
+    if (answers.manager === 'None' || answers.manager === answers.employee) {
+      managerId = null;
+    } else {
+      let managerNameArray = answers.manager.split(' ');
+      let managerIdCall = await sqlQueries.getManagerEmployeeId([
+        managerNameArray[0],
+        managerNameArray[1],
+      ]);
+      managerId = managerIdCall[0][0].id;
+    }
+    await sqlQueries.updateManager([managerId, employeeId]);
+    console.log('Employee manager updated');
+  }
+
+  if (response.menu === `See Manager's Team`) {
+    let managerQuery = await sqlQueries.getManagers();
+    let managerList = managerQuery[0].map((manager) => {
+      return `${manager.first_name} ${manager.last_name}`;
+    });
+    let answers = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'manager',
+        message: 'Choose a manager',
+        choices: managerList
+      }
+    ])
+
+    let managerNameArray = answers.manager.split(' ');
+    let managerIdCall = await sqlQueries.getManagerEmployeeId([
+      managerNameArray[0],
+      managerNameArray[1],
+    ]);
+    managerId = managerIdCall[0][0].id;
+    let results = await sqlQueries.getManagerTeam([managerId]);
+    console.table(results[0]);
   }
 
   openMenu();
