@@ -1,14 +1,15 @@
 const inquirer = require('inquirer');
-const menu = require('./questions/menu');
-const addDepartment = require('./questions/addDepartment');
-const { addRoleMenu, queryDepartment, queryRole, queryEmployee, updateRoleMenu, queryManager, addEmployeeMenu, findRoleId, findDepartmentId, findEmployeeId, findManagerId, updateManagerMenu } = require('./utils/helper')
+
+const {queryDepartment, queryRole, queryEmployee, queryManager, findRoleId, findDepartmentId, findEmployeeId, findManagerId } = require('./utils/helper')
+const menus = require('./utils/menus');
+const findId = require('./utils/findId');
 
 const cTable = require('console.table');
 
 const { addQueries: add, getQueries: get, removeQueries: remove, updateQueries: update } = require('./queries');
 
 async function openMenu() {
-  let response = await inquirer.prompt(menu);
+  let response = await inquirer.prompt(menus.main);
   if (response.menu === 'View All Employees') {
     let results = await get.getEmployees();
     console.table(results[0]);
@@ -22,15 +23,15 @@ async function openMenu() {
     console.table(results[0]);
   }
   if (response.menu === 'Add Department') {
-    let response = await inquirer.prompt(addDepartment);
+    let response = await inquirer.prompt(menus.addDepartment);
     let { departmentName } = response;
     await add.addNewDepartment(departmentName);
     console.log(`${departmentName} added to database.`);
   }
   if (response.menu === 'Add Role') {
     let departmentData = await queryDepartment();
-    let response = await addRoleMenu(departmentData.list);
-    let departmentId = findDepartmentId(departmentData, response);
+    let response = await menus.addRoleMenu(departmentData.list);
+    let departmentId = findId.department(departmentData, response);
 
     await add.addNewRole([
       response.roleName,
@@ -43,11 +44,11 @@ async function openMenu() {
   if (response.menu === 'Add Employee') {
     let roleData = await queryRole();
     let managerData = await queryManager();
-    let response = await addEmployeeMenu(roleData.list, managerData.list);
-    let roleId = findRoleId(roleData, response);
+    let response = await menus.addEmployeeMenu(roleData.list, managerData.list);
+    let roleId = findId.role(roleData, response);
 
     if (response.manager !== 'None') {
-      let managerId = findManagerId(response);
+      let managerId = await findId.manager(response);
       await add.addNewEmployee([response.firstName, response.lastName, roleId, managerId]);
     } else {
       await add.addNewEmployee([response.firstName, response.lastName, roleId, null]);
@@ -57,10 +58,10 @@ async function openMenu() {
   if (response.menu === 'Update Employee Role') {
     let employeeData = await queryEmployee();
     let roleData = await queryRole();
-    let answers = await updateRoleMenu(employeeData.list, roleData.list);
+    let answers = await menus.updateRoleMenu(employeeData.list, roleData.list);
 
-    let roleId = findRoleId(roleData, answers);
-    let employeeId = findEmployeeId(employeeData, answers);
+    let roleId = findId.role(roleData, answers);
+    let employeeId = findId.employee(employeeData, answers);
 
     await update.updateEmployeeRole([roleId, employeeId]);
     console.log('Employee role updated');
@@ -68,14 +69,14 @@ async function openMenu() {
   if (response.menu === 'Update Employee Manager') {
     let employeeData = await queryEmployee();
     let managerData = await queryManager();
-    let answers = await updateManagerMenu(employeeData.list, managerData.list);
+    let answers = await menus.updateManagerMenu(employeeData.list, managerData.list);
 
-    let employeeId = findEmployeeId(employeeData, answers);
+    let employeeId = findId.employee(employeeData, answers);
     let managerId;
     if (answers.manager === 'None' || answers.manager === answers.employee) {
       managerId = null;
     } else {
-      managerId = await findManagerId(answers);
+      managerId = await findId.manager(answers);
     }
     await update.updateManager([managerId, employeeId]);
     console.log('Employee manager updated');
@@ -91,7 +92,7 @@ async function openMenu() {
       }
     ])
 
-    let managerId = await findManagerId(answers);
+    let managerId = await findId.manager(answers);
     let results = await get.getManagerTeam([managerId]);
 
     if (results[0].length) {
@@ -111,7 +112,7 @@ async function openMenu() {
       }
     ])
 
-    let departmentId = findDepartmentId(departmentData, answer);
+    let departmentId = findId.department(departmentData, answer);
     let results = await get.getEmployeeByDepartment(departmentId);
     
     if (results[0].length) {
@@ -131,7 +132,7 @@ async function openMenu() {
       }
     ])
 
-    let employeeId = findEmployeeId(employeeData, answer);
+    let employeeId = findId.employee(employeeData, answer);
     await remove.removeEmployee(employeeId);
     console.log(`${answer.employee} has been removed from the database`)
   }
@@ -146,7 +147,7 @@ async function openMenu() {
       }
     ]);
     
-    let roleId = findRoleId(roleData, answer);
+    let roleId = findId.role(roleData, answer);
     await remove.removeRole(roleId);
     console.log(`${answer.role} has been removed from the database`);
   }
@@ -161,7 +162,7 @@ async function openMenu() {
       },
     ]);
 
-    let departmentId = findDepartmentId(departmentData, answer)
+    let departmentId = findId.department(departmentData, answer)
     await remove.removeDepartment(departmentId);
     console.log(`${answer.department} was removed from the database`);
   }
@@ -176,7 +177,7 @@ async function openMenu() {
       },
     ]);
 
-    let departmentId = findDepartmentId(departmentData, answer);
+    let departmentId = findId.department(departmentData, answer);
     let results = await get.getEmployeeByDepartment(departmentId);
     if (results[0].length) {
       let salaryArray = results[0].map(employee => {

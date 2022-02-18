@@ -87,6 +87,7 @@ async function updateManagerMenu(employeeList, managerList) {
   ]);
   return answers;
 }
+
 async function queryDepartment() {
   let departmentQuery = await get.getDepartments();
   let departmentList = departmentQuery[0].map((department) => {
