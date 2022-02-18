@@ -8,7 +8,8 @@ const getQueries = {
                 LEFT JOIN employee AS m ON e.manager_id = m.id
                 `,
   roleText: `SELECT r.id, r.title, r.salary, d.name AS department FROM role as r
-            JOIN department AS d ON r.department_id = d.id`,
+            JOIN department AS d ON r.department_id = d.id
+            ORDER BY r.id`,
   departmentText: `SELECT * FROM department`,
   managerText: `SELECT *
                 FROM employee

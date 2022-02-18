@@ -15,3 +15,5 @@ const updateQueries = {
     return connection.promise().query(this.updateManagerText, params);
   },
 };
+
+module.exports = updateQueries;
