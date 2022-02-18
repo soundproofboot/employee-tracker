@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 
-const {queryDepartment, queryRole, queryEmployee, queryManager, findRoleId, findDepartmentId, findEmployeeId, findManagerId } = require('./utils/helper')
+const {queryDepartment, queryRole, queryEmployee, queryManager} = require('./utils/tableQueries')
 const menus = require('./utils/menus');
 const findId = require('./utils/findId');
 
