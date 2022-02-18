@@ -5,6 +5,8 @@ const addDepartment = require('./questions/addDepartment');
 const cTable = require('console.table');
 const sqlQueries = require('./queries/queries');
 
+const { addQueries, getQueries, removeQueries, updateQueries } = require('./queries');
+
 async function openMenu() {
   let response = await inquirer.prompt(menu);
   if (response.menu === 'View All Employees') {
