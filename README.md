@@ -26,6 +26,8 @@ First, clone this repo. You'll need to link your database by updating the inform
 When the app starts you will be given a list of options. 
 You can view, add, update or remove employees, roles, or departments, and can also track each department's budget.
 
+A walkthrough video can be found [here](https://drive.google.com/file/d/1RU7mjpbSjFe3IK_px7ou5Rc3LS4msWuO/view).
+
 ## Contributing
 This application uses 
 [mysql2](https://www.npmjs.com/package/mysql2) to interact with the database and 
