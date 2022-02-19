@@ -1,5 +1,7 @@
+// import connection
 const connection = require('./connection');
 
+// properties and methods used to update parts of tables
 const updateQueries = {
   updateEmployeeRoleText: `UPDATE employee
                           SET role_id = ?

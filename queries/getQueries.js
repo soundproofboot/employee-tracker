@@ -1,6 +1,9 @@
+// import connection
 const connection = require('./connection');
 
+// object containing properties and methods used to select data from tables
 const getQueries = {
+  // SQL strings used to pull employees, roles, departments, managers, and the full employee table
   employeeText: `SELECT e.first_name AS first_name, e.last_name AS last_name, title, salary, name AS department, m.first_name AS manager_first, m.last_name AS manager_last
                 FROM employee AS e
                 LEFT JOIN role ON e.role_id = role.id 
@@ -17,9 +20,11 @@ const getQueries = {
   getFullEmployeeTableText: `SELECT * FROM employee`,
   managerEmployeeIdText: `SELECT id FROM employee WHERE first_name = ? AND last_name = ?`,
 
+  // special conditions to pull manager's team and department list
   getManagerTeamCondition: `WHERE e.manager_id = ?`,
   getEmployeeByDepartmentCondition: `WHERE department_id = ?`,
 
+  // methods to execute above
   getEmployees: function () {
     return connection.promise().query(this.employeeText);
   },
@@ -39,6 +44,7 @@ const getQueries = {
     return connection.promise().query(this.getFullEmployeeTableText);
   },
 
+  // methods with conditions added
   getManagerTeam: function (params) {
     return connection
       .promise()

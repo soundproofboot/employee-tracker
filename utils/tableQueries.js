@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const get = require('../queries/getQueries')
 
+// set of helper functions used to populate choices for inquirer menus
+// 
 async function queryDepartment() {
   let departmentQuery = await get.getDepartments();
   let departmentList = departmentQuery[0].map((department) => {

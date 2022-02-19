@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 
+// menu object containing all the questions used in different inquirer prompts
 const menus = {
+  // main menu
   main: [
     {
       type: 'list',
@@ -24,6 +26,7 @@ const menus = {
       ],
     },
   ],
+  // used to add a department
   addDepartment: [
     {
       type: 'input',
@@ -31,6 +34,7 @@ const menus = {
       message: 'What is the name of the department?',
     },
   ],
+  // used to add a role, needs list of departments
   async addRoleMenu(departmentList) {
     let response = await inquirer.prompt([
       {
@@ -54,6 +58,7 @@ const menus = {
     return response;
   },
 
+  // used to update a role, needs list of employees and roles
   async updateRoleMenu(employeeList, roleList) {
     let answers = await inquirer.prompt([
       {
@@ -72,6 +77,7 @@ const menus = {
     return answers;
   },
 
+  // used to add an employee, needs list of roles and managers
   async addEmployeeMenu(roleList, managerList) {
     let response = await inquirer.prompt([
       {
@@ -100,6 +106,7 @@ const menus = {
     return response;
   },
 
+  // used to change employee's manager, needs list of employees and managers
   async updateManagerMenu(employeeList, managerList) {
     let answers = await inquirer.prompt([
       {

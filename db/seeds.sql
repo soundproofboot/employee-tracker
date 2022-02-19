@@ -1,3 +1,4 @@
+-- seed tables with dummy data
 INSERT INTO department (name)
 VALUES ('Engineering'), ('Sales'), ('Customer Service'), ('Design');
 

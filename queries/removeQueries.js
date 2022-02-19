@@ -1,10 +1,14 @@
+// import connection
 const connection = require('./connection');
 
+// properties and methods to remove items from tables
 const removeQueries = {
+  // sql strings used for methods
   removeEmployeeText: `DELETE FROM employee WHERE id = ?`,
   removeRoleText: `DELETE FROM role WHERE id = ?`,
   removeDepartmentText: `DELETE FROM department WHERE id = ?`,
 
+  // methods to remove employees, roles, and departments
   removeEmployee: function (params) {
     return connection.promise().query(this.removeEmployeeText, params);
   },
